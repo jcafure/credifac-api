@@ -1,0 +1,21 @@
+server:
+  servlet:
+    context-path: /credifac/v1
+
+service:
+  name: credifac
+  version: V1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/credifacdb
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
