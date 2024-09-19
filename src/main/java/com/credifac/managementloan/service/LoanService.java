@@ -33,15 +33,16 @@ public class LoanService {
 
     public LoanDTO createLoan(LoanRequestDTO loanRequestDTO){
         var loan = buildLoan(loanRequestDTO.dateLoan, loanRequestDTO.loanAmount);
-        loan.setCustomer(buildCustomer(loanRequestDTO.personName));
+        loan.setCustomer(buildCustomer(loanRequestDTO.personName, loanRequestDTO.phoneNumber));
         loan.setInstallments(installmentService.generateValue(loanRequestDTO.loanAmount, loan.getDateLoan()));
 
         return mapper.toDto(loanRepository.save(loan));
     }
 
-    private Customer buildCustomer(String name){
+    private Customer buildCustomer(String name, String phoneNumber){
         var customer = new Customer();
         customer.setName(name);
+        customer.setPhoneNumber(phoneNumber);
         customer.setRegistrationDate(LocalDate.now());
         return customer;
     }

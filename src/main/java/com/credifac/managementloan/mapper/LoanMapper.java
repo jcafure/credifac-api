@@ -24,6 +24,7 @@ public class LoanMapper {
         loanDTO.loanDate = loan.getDateLoan();
         loanDTO.customerDTO = new CustomerDTO();
         loanDTO.customerDTO.name = loan.getCustomer().getName();
+        loanDTO.customerDTO.phoneNumber = loan.getCustomer().getPhoneNumber();
         loanDTO.installmentDTOList.addAll(installmentMapper.toDto(loan.getInstallments()));
         return loanDTO;
     }
