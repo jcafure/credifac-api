@@ -50,7 +50,7 @@ class LoanControllerTest {
         loanRequestDTO.personName = "julinho da van";
         loanRequestDTO.phoneNumber = "67852145698";
 
-        LoanDTO loanDTO = new LoanDTO();
+        final var loanDTO = new LoanDTO();
         loanDTO.totalAmount = loanRequestDTO.loanAmount;
         loanDTO.loanDate = loanRequestDTO.dateLoan;
 
