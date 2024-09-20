@@ -8,7 +8,7 @@ service:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/credifacdb
+    url: jdbc:postgresql://local-postgres-compose:5432/credifacdb
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
