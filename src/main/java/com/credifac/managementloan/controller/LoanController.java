@@ -17,18 +17,8 @@ public class LoanController {
 
     private final LoanService loanService;
 
-    @PostMapping("/create")
-    public String createLoan(@Valid LoanRequestDTO loanRequestDTO, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "/loans/create";
-        }
-        loanService.createLoan(loanRequestDTO);
-        
-        return "redirect:/loans/list";
-    }
-
     @GetMapping
-    public String getFormLoan(Model model) {
+    public String getFormCreateLoan(Model model) {
         model.addAttribute("loanRequestDTO", new LoanRequestDTO());
         return "/loans/create";
     }
@@ -38,5 +28,28 @@ public class LoanController {
         var loans = loanService.findAll();
         model.addAttribute("loans", loans);
         return "/loans/list";
+    }
+
+    @GetMapping("/update/{id}")
+    public String getFormUpdateLoan(Model model, @PathVariable Long id) {
+        // TODO implementar
+        return "";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        loanService.delete(id);
+        return "redirect:/loans/list";
+    }
+
+
+    @PostMapping("/create")
+    public String createLoan(@Valid LoanRequestDTO loanRequestDTO, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "/loans/create";
+        }
+        loanService.createLoan(loanRequestDTO);
+        
+        return "redirect:/loans/list";
     }
 }

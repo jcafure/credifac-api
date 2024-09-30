@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -40,6 +41,11 @@ public class LoanService {
                     .stream()
                     .map(loan -> mapper.toDto(loan))
                     .collect(toList());
+    }
+
+    public void delete(Long id) {
+        Optional<Loan> loanOptional = loanRepository.findById(id);
+        loanOptional.ifPresent(loan -> loanRepository.delete(loan));
     }
 
     private Customer buildCustomer(String name, String phoneNumber){
