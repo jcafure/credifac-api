@@ -55,10 +55,10 @@ class LoanControllerTest {
         loanDTO.loanDate = loanRequestDTO.dateLoan;
 
         when(loanService.createLoan(any(LoanRequestDTO.class))).thenReturn(loanDTO);
-        mockMvc.perform(post("/loans/create-loan")
+        mockMvc.perform(post("/loans/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loanRequestDTO)))
-                .andExpect(status().isCreated());
+                .andExpect(status().is3xxRedirection());
 
         verify(loanService, times(1)).createLoan(any(LoanRequestDTO.class));
     }
