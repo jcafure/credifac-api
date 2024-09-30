@@ -44,10 +44,10 @@ class LoanServiceTest {
         final var installment02 = new Installment();
         final var installment03 = new Installment();
 
-        loanRequestDTO.dateLoan = LocalDate.now();
-        loanRequestDTO.loanAmount = BigDecimal.valueOf(5000);
-        loanRequestDTO.personName = "Charlinhu";
-        loanRequestDTO.phoneNumber = "67982154787";
+        loanRequestDTO.setDateLoan(LocalDate.now());
+        loanRequestDTO.setLoanAmount(BigDecimal.valueOf(5000));
+        loanRequestDTO.setPersonName("Charlinhu");
+        loanRequestDTO.setPhoneNumber("67982154787");
 
         installment01.setInstallmentNumber(1);
         installment01.setPaymentStatus(PaymentStatus.OPEN);
@@ -68,11 +68,11 @@ class LoanServiceTest {
         installment03.setId(3L);
 
         final var loan = new Loan();
-        loan.setDateLoan(loanRequestDTO.dateLoan);
-        loan.setTotalAmount(loanRequestDTO.loanAmount);
+        loan.setDateLoan(loanRequestDTO.getDateLoan());
+        loan.setTotalAmount(loanRequestDTO.getLoanAmount());
         loan.setInstallments(List.of(installment01, installment02, installment03));
 
-        Mockito.when(installmentService.generateValue(loanRequestDTO.loanAmount, loanRequestDTO.dateLoan)).
+        Mockito.when(installmentService.generateValue(loanRequestDTO.getLoanAmount(), loanRequestDTO.getDateLoan())).
                 thenReturn(List.of(installment01, installment02, installment03));
         Mockito.when(loanRepository.save(Mockito.any(Loan.class))).thenReturn(loan);
         Mockito.when(mapper.toDto(Mockito.any(Loan.class))).thenReturn(new LoanDTO());
@@ -80,7 +80,7 @@ class LoanServiceTest {
         LoanDTO result = service.createLoan(loanRequestDTO);
 
         assertNotNull(result);
-        verify(installmentService).generateValue(loanRequestDTO.loanAmount, loanRequestDTO.dateLoan);
+        verify(installmentService).generateValue(loanRequestDTO.getLoanAmount(), loanRequestDTO.getDateLoan());
         verify(loanRepository).save(Mockito.any(Loan.class));
         verify(mapper).toDto(Mockito.any(Loan.class));
     }

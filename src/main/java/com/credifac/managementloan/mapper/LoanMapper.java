@@ -3,29 +3,26 @@ package com.credifac.managementloan.mapper;
 import com.credifac.managementloan.dto.CustomerDTO;
 import com.credifac.managementloan.dto.LoanDTO;
 import com.credifac.managementloan.entity.Loan;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class LoanMapper {
 
     private final InstallmentMapper installmentMapper;
 
-    @Autowired
-    public LoanMapper(InstallmentMapper installmentMapper) {
-        this.installmentMapper = installmentMapper;
-    }
-
     public LoanDTO toDto(Loan loan) {
         var loanDTO = new LoanDTO();
-        loanDTO.id = loan.getId();
-        loanDTO.loanStatus = loan.getLoanStatus().name();
-        loanDTO.totalAmount = loan.getTotalAmount();
-        loanDTO.loanDate = loan.getDateLoan();
-        loanDTO.customerDTO = new CustomerDTO();
-        loanDTO.customerDTO.name = loan.getCustomer().getName();
-        loanDTO.customerDTO.phoneNumber = loan.getCustomer().getPhoneNumber();
-        loanDTO.installmentDTOList.addAll(installmentMapper.toDto(loan.getInstallments()));
+        loanDTO.setId(loan.getId());
+        loanDTO.setLoanStatus(loan.getLoanStatus().name());
+        loanDTO.setTotalAmount(loan.getTotalAmount());
+        loanDTO.setLoanDate(loan.getDateLoan());
+        loanDTO.setCustomer(new CustomerDTO());
+        loanDTO.getCustomer().setName(loan.getCustomer().getName());
+        loanDTO.getCustomer().setPhoneNumber(loan.getCustomer().getPhoneNumber());
+        loanDTO.getInstallmentList().addAll(installmentMapper.toDto(loan.getInstallments()));
         return loanDTO;
     }
 }
