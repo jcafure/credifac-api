@@ -1,6 +1,5 @@
 package com.credifac.managementloan.service;
 
-
 import com.credifac.managementloan.domain.LoanStatus;
 import com.credifac.managementloan.dto.LoanDTO;
 import com.credifac.managementloan.dto.LoanRequestDTO;
@@ -8,35 +7,45 @@ import com.credifac.managementloan.entity.Customer;
 import com.credifac.managementloan.entity.Loan;
 import com.credifac.managementloan.mapper.LoanMapper;
 import com.credifac.managementloan.repository.LoanRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
+@RequiredArgsConstructor
 public class LoanService {
 
     private final InstallmentService installmentService;
     private final LoanMapper mapper;
     private final LoanRepository loanRepository;
 
-    @Autowired
-    public LoanService(InstallmentService installmentService,
-                       LoanMapper mapper,
-                       LoanRepository loanRepository) {
-        this.installmentService = installmentService;
-        this.mapper = mapper;
-        this.loanRepository = loanRepository;
-    }
-
     public LoanDTO createLoan(LoanRequestDTO loanRequestDTO){
-        var loan = buildLoan(loanRequestDTO.dateLoan, loanRequestDTO.loanAmount);
-        loan.setCustomer(buildCustomer(loanRequestDTO.personName, loanRequestDTO.phoneNumber));
-        loan.setInstallments(installmentService.generateValue(loanRequestDTO.loanAmount, loan.getDateLoan()));
+        var loan = buildLoan(loanRequestDTO.getDateLoan(), loanRequestDTO.getLoanAmount());
+        loan.setCustomer(buildCustomer(loanRequestDTO.getPersonName(), loanRequestDTO.getPhoneNumber()));
+        loan.setInstallments(installmentService.generateValue(loanRequestDTO.getLoanAmount(), loan.getDateLoan()));
 
         return mapper.toDto(loanRepository.save(loan));
+    }
+
+    public List<LoanDTO> findAll() {
+        return loanRepository.findAll()
+                    .stream()
+                    .map(loan -> mapper.toDto(loan))
+                    .collect(toList());
+    }
+
+    public void delete(Long id) {
+        Optional<Loan> loanOptional = loanRepository.findById(id);
+        loanOptional.ifPresent(loan -> loanRepository.delete(loan));
     }
 
     private Customer buildCustomer(String name, String phoneNumber){

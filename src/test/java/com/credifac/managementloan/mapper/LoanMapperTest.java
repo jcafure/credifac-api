@@ -66,11 +66,11 @@ class LoanMapperTest {
         Mockito.when(installmentMapper.toDto(installments)).thenReturn(List.of(installmentDto));
 
         LoanDTO loanDTO = mapper.toDto(loanEntity);
-        Assertions.assertThat(loanDTO.id).isEqualTo(loanEntity.getId());
-        Assertions.assertThat(loanDTO.loanStatus).isEqualTo(loanEntity.getLoanStatus().name());
-        Assertions.assertThat(loanDTO.customerDTO.name).isEqualTo(loanEntity.getCustomer().getName());
-        Assertions.assertThat(loanDTO.totalAmount).isEqualTo(loanEntity.getTotalAmount());
-        Assertions.assertThat(loanDTO.installmentDTOList).isNotEmpty();
+        Assertions.assertThat(loanDTO.getId()).isEqualTo(loanEntity.getId());
+        Assertions.assertThat(loanDTO.getLoanStatus()).isEqualTo(loanEntity.getLoanStatus().name());
+        Assertions.assertThat(loanDTO.getCustomer().getName()).isEqualTo(loanEntity.getCustomer().getName());
+        Assertions.assertThat(loanDTO.getTotalAmount()).isEqualTo(loanEntity.getTotalAmount());
+        Assertions.assertThat(loanDTO.getInstallmentList()).isNotEmpty();
 
     }
 }

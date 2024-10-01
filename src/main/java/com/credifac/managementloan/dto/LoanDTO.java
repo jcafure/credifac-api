@@ -5,12 +5,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoanDTO {
-    public Long id;
-    public String loanStatus;
-    public LocalDate loanDate;
-    public BigDecimal totalAmount;
-    public List<InstallmentDTO> installmentDTOList = new ArrayList<>();
-    public CustomerDTO customerDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoanDTO {
+
+    private Long id;
+    private String loanStatus;
+    private LocalDate loanDate;
+    private BigDecimal totalAmount;
+    private List<InstallmentDTO> installmentList = new ArrayList<>();
+    private CustomerDTO customer;
 }

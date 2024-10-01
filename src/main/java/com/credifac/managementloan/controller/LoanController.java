@@ -1,27 +1,55 @@
 package com.credifac.managementloan.controller;
 
-import com.credifac.managementloan.dto.LoanDTO;
 import com.credifac.managementloan.dto.LoanRequestDTO;
 import com.credifac.managementloan.service.LoanService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/loans")
+@RequiredArgsConstructor
 public class LoanController {
 
     private final LoanService loanService;
 
-    @Autowired
-    public LoanController(LoanService loanService) {
-        this.loanService = loanService;
+    @GetMapping
+    public String getFormCreateLoan(Model model) {
+        model.addAttribute("loanRequestDTO", new LoanRequestDTO());
+        return "/loans/create";
     }
 
-    @PostMapping("/create-loan")
-    public ResponseEntity<LoanDTO> createLoan(@RequestBody LoanRequestDTO loanRequestDTO) {
-        LoanDTO loan = loanService.createLoan(loanRequestDTO);
-        return new ResponseEntity<>(loan, HttpStatus.CREATED);
+    @GetMapping("/list")
+    public String getFormListLoan(Model model) {
+        var loans = loanService.findAll();
+        model.addAttribute("loans", loans);
+        return "/loans/list";
+    }
+
+    @GetMapping("/update/{id}")
+    public String getFormUpdateLoan(Model model, @PathVariable Long id) {
+        // TODO implementar
+        return "";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        loanService.delete(id);
+        return "redirect:/loans/list";
+    }
+
+
+    @PostMapping("/create")
+    public String createLoan(@Valid LoanRequestDTO loanRequestDTO, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "/loans/create";
+        }
+        loanService.createLoan(loanRequestDTO);
+        
+        return "redirect:/loans/list";
     }
 }

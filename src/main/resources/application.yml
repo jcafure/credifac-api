@@ -2,19 +2,19 @@ server:
   servlet:
     context-path: /credifac/v1
 
-service:
-  name: credifac
-  version: V1
+# service:
+#   name: credifac
+#   version: V1
 
 spring:
   datasource:
-    url: jdbc:postgresql://local-postgres-compose:5432/credifacdb
-    username: postgres
-    password: admin
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/credifacdb}
+    username: ${DATABASE_URL:postgres}
+    password: ${DATABASE_URL:admin}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
