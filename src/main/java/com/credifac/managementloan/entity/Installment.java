@@ -3,18 +3,16 @@ package com.credifac.managementloan.entity;
 import com.credifac.managementloan.domain.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "installment")
-public class Installment {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Installment extends BaseEntity {
 
     private int installmentNumber;
 

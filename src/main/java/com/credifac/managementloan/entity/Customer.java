@@ -1,9 +1,6 @@
 package com.credifac.managementloan.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,11 +8,8 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "customer")
-public class Customer {
+public class Customer extends BaseEntity{
 
-    @Id
-    @GeneratedValue
-    private Long id;
     private String name;
     private String phoneNumber;
     private LocalDate registrationDate;
