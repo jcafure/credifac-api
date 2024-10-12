@@ -53,6 +53,7 @@ class LoanMapperTest {
         installment.setPaymentStatus(PaymentStatus.OPEN);
 
         personEntity.setName("charlinhos");
+        personEntity.setPhoneNumber("67987456322");
         loanEntity.setId(1L);
         loanEntity.setDateLoan(LocalDate.now());
         loanEntity.setCustomer(personEntity);
@@ -67,7 +68,7 @@ class LoanMapperTest {
 
         LoanDTO loanDTO = mapper.toDto(loanEntity);
         Assertions.assertThat(loanDTO.getId()).isEqualTo(loanEntity.getId());
-        Assertions.assertThat(loanDTO.getLoanStatus()).isEqualTo(loanEntity.getLoanStatus().name());
+        Assertions.assertThat(loanDTO.getLoanStatus()).isEqualTo(loanEntity.getLoanStatus().getNameStatus());
         Assertions.assertThat(loanDTO.getCustomer().getName()).isEqualTo(loanEntity.getCustomer().getName());
         Assertions.assertThat(loanDTO.getTotalAmount()).isEqualTo(loanEntity.getTotalAmount());
         Assertions.assertThat(loanDTO.getInstallmentList()).isNotEmpty();

@@ -31,7 +31,6 @@ public class LoanController {
     public String getFormListLoan(Model model) {
         var loans = loanService.findAll();
         model.addAttribute("loans", loans);
-
         return "/loans/list";
     }
 
