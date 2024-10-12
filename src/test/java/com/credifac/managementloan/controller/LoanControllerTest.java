@@ -26,7 +26,7 @@ class LoanControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private LoanService loanService;  // Use @MockBean aqui
+    private LoanService loanService;
 
     @InjectMocks
     private LoanController loanController;
@@ -53,15 +53,11 @@ class LoanControllerTest {
         loanRequest.setPersonName("Julinho da Van");
         loanRequest.setPhoneNumber("67852145698");
 
-        // Criando o LoanDTO que será retornado pelo serviço
         LoanDTO loanDTO = new LoanDTO();
         loanDTO.setTotalAmount(loanRequest.getLoanAmount());
         loanDTO.setLoanDate(loanRequest.getDateLoan());
-
-        // Simulando o comportamento do loanService
         when(loanService.createLoan(any(LoanRequestDTO.class))).thenReturn(loanDTO);
 
-        // Realizando a chamada ao controlador
         mockMvc.perform(post("/loans/create")
                         .param("personName", loanRequest.getPersonName())
                         .param("phoneNumber", loanRequest.getPhoneNumber())
