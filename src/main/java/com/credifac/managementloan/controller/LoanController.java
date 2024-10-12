@@ -56,11 +56,4 @@ public class LoanController {
         
         return "redirect:/loans/list";
     }
-
-    private String formatCurrency(BigDecimal value) {
-        Locale brazilLocale = new Locale("pt", "br");
-        NumberFormat currencyFormater = NumberFormat.getCurrencyInstance(brazilLocale);
-
-        return currencyFormater.format(value);
-    }
 }
