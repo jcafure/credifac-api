@@ -31,7 +31,6 @@ class LoanControllerTest {
     @InjectMocks
     private LoanController loanController;
 
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);

@@ -71,6 +71,6 @@ class LoanMapperTest {
         Assertions.assertThat(loanDTO.getCustomer().getName()).isEqualTo(loanEntity.getCustomer().getName());
         Assertions.assertThat(loanDTO.getTotalAmount()).isEqualTo(loanEntity.getTotalAmount());
         Assertions.assertThat(loanDTO.getInstallmentList()).isNotEmpty();
-
     }
+
 }

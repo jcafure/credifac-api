@@ -17,7 +17,9 @@ public class LoanDTO {
     private Long id;
     private String loanStatus;
     private LocalDate loanDate;
+    private String loanDateFormated;
     private BigDecimal totalAmount;
+    private String totalAmountformated;
     private List<InstallmentDTO> installmentList = new ArrayList<>();
     private CustomerDTO customer;
 }

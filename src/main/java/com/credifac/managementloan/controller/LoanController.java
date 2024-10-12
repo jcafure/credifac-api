@@ -10,6 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 @Controller
 @RequestMapping("/loans")
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class LoanController {
     public String getFormListLoan(Model model) {
         var loans = loanService.findAll();
         model.addAttribute("loans", loans);
+
         return "/loans/list";
     }
 
@@ -51,5 +56,12 @@ public class LoanController {
         loanService.createLoan(loanRequestDTO);
         
         return "redirect:/loans/list";
+    }
+
+    private String formatCurrency(BigDecimal value) {
+        Locale brazilLocale = new Locale("pt", "br");
+        NumberFormat currencyFormater = NumberFormat.getCurrencyInstance(brazilLocale);
+
+        return currencyFormater.format(value);
     }
 }
