@@ -3,12 +3,14 @@ package com.credifac.managementloan.service;
 import com.credifac.managementloan.domain.LoanStatus;
 import com.credifac.managementloan.dto.LoanDTO;
 import com.credifac.managementloan.dto.LoanRequestDTO;
+import com.credifac.managementloan.dto.LoanUpdateDTO;
 import com.credifac.managementloan.entity.Customer;
 import com.credifac.managementloan.entity.Installment;
 import com.credifac.managementloan.entity.Loan;
 import com.credifac.managementloan.mapper.LoanMapper;
 import com.credifac.managementloan.repository.LoanRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -42,6 +44,12 @@ public class LoanService {
                 .stream()
                 .map(loan -> mapper.toDto(loan))
                 .collect(toList());
+    }
+
+    public LoanUpdateDTO findById(Long id) {
+        return loanRepository.findById(id)
+                .map(mapper::mapLoanToLoanUpdateDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Empréstimo com ID " + id + " não encontrado."));
     }
 
     public void delete(Long id) {

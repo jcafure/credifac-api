@@ -1,6 +1,8 @@
 package com.credifac.managementloan.controller;
 
 import com.credifac.managementloan.dto.LoanRequestDTO;
+import com.credifac.managementloan.dto.LoanUpdateDTO;
+import com.credifac.managementloan.entity.Loan;
 import com.credifac.managementloan.service.LoanService;
 
 import jakarta.validation.Valid;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/loans")
@@ -20,6 +23,7 @@ import java.util.Locale;
 public class LoanController {
 
     private final LoanService loanService;
+
 
     @GetMapping
     public String getFormCreateLoan(Model model) {
@@ -36,8 +40,9 @@ public class LoanController {
 
     @GetMapping("/update/{id}")
     public String getFormUpdateLoan(Model model, @PathVariable Long id) {
-        // TODO implementar
-        return "";
+        LoanUpdateDTO dto = loanService.findById(id);
+        model.addAttribute("loanUpdateDTO", dto);
+        return "/loans/loan-edit-form";
     }
 
     @GetMapping("/delete/{id}")

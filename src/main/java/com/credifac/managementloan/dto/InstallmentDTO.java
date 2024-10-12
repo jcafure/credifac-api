@@ -17,4 +17,7 @@ public class InstallmentDTO {
     public BigDecimal installmentAmount;
     public LocalDate dueDate;
     public String paymentStatus;
+
+    public InstallmentDTO(String s, String s1, String namePaymentStatus) {
+    }
 }
