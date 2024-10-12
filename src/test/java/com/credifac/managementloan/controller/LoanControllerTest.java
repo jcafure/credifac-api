@@ -39,7 +39,6 @@ class LoanControllerTest {
 
     @Test
     void shouldReturnLoanCreateForm() throws Exception {
-        // Testando o retorno do formulário de criação de empréstimo
         mockMvc.perform(get("/loans"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/loans/create"))
@@ -48,10 +47,9 @@ class LoanControllerTest {
 
     @Test
     void shouldCreateLoanAndRedirectToList() throws Exception {
-        // Preparando os dados de entrada
         LoanRequestDTO loanRequest = new LoanRequestDTO();
-        loanRequest.setDateLoan(LocalDate.now());  // Definindo a data do empréstimo
-        loanRequest.setLoanAmount(BigDecimal.valueOf(5000));  // Definindo o valor do empréstimo
+        loanRequest.setDateLoan(LocalDate.now());
+        loanRequest.setLoanAmount(BigDecimal.valueOf(5000));
         loanRequest.setPersonName("Julinho da Van");
         loanRequest.setPhoneNumber("67852145698");
 
@@ -68,11 +66,10 @@ class LoanControllerTest {
                         .param("personName", loanRequest.getPersonName())
                         .param("phoneNumber", loanRequest.getPhoneNumber())
                         .param("loanAmount", loanRequest.getLoanAmount().toString())
-                        .param("dateLoan", loanRequest.getDateLoan().toString()))  // Certifique-se de incluir todos os campos
+                        .param("dateLoan", loanRequest.getDateLoan().toString()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/loans/list"));
 
-        // Verificando se o método foi chamado
         verify(loanService, times(1)).createLoan(any(LoanRequestDTO.class));
     }
 
@@ -80,7 +77,6 @@ class LoanControllerTest {
 
     @Test
     void shouldListLoans() throws Exception {
-        // Simulando a listagem de empréstimos
         when(loanService.findAll()).thenReturn(List.of());
 
         mockMvc.perform(get("/loans/list"))
@@ -91,7 +87,6 @@ class LoanControllerTest {
 
     @Test
     void shouldDeleteLoanAndRedirectToList() throws Exception {
-        // Simulando a deleção de um empréstimo e redirecionando para a lista
         doNothing().when(loanService).delete(1L);
 
         mockMvc.perform(get("/loans/delete/1"))
