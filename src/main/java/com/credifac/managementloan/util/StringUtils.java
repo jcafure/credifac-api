@@ -11,7 +11,7 @@ public class StringUtils {
     public static String formatCurrency(BigDecimal value) {
         var brazilLocale = new Locale("pt", "br");
         NumberFormat currencyFormater = NumberFormat.getCurrencyInstance(brazilLocale);
-        return currencyFormater.format(value);
+        return currencyFormater.format(value).replace("\u00A0", " ").trim();
     }
 
     public static String formatPhoneNumber(String phoneNumber) {
