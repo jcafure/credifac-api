@@ -1,21 +1,17 @@
 package com.credifac.managementloan.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "customer")
-public class Customer {
+public class Customer extends BaseEntity{
 
-    @Id
-    @GeneratedValue
-    private Long id;
     private String name;
     private String phoneNumber;
     private LocalDate registrationDate;

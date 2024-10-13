@@ -31,9 +31,9 @@
                         <tr>
                             <td th:text="${loan.customer.name}"></td>
                             <td th:text="${loan.customer.phoneNumber}"></td>
-                            <td th:text="${loan.loanDate}"></td>
+                            <td th:text="${loan.loanDateFormated}"></td>
                             <td th:text="${loan.loanStatus}"></td>
-                            <td th:text="${loan.totalAmount}"></td>
+                            <td th:text="${loan.totalAmountformated}"></td>
                             <td>
                                 <button class="btn btn-primary"><i class="bi bi-pencil"></i></button>
                                 <a th:href="@{/loans/delete/{id}(id=${loan.id})}">
