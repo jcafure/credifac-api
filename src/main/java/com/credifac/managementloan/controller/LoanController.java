@@ -42,7 +42,7 @@ public class LoanController {
     public String getFormUpdateLoan(Model model, @PathVariable Long id) {
         LoanUpdateDTO dto = loanService.findById(id);
         model.addAttribute("loanUpdateDTO", dto);
-        return "/loans/loan-edit-form";
+        return "/loans/edit";
     }
 
     @GetMapping("/delete/{id}")
@@ -51,7 +51,6 @@ public class LoanController {
         return "redirect:/loans/list";
     }
 
-
     @PostMapping("/create")
     public String createLoan(@Valid LoanRequestDTO loanRequestDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -59,6 +58,12 @@ public class LoanController {
         }
         loanService.createLoan(loanRequestDTO);
         
+        return "redirect:/loans/list";
+    }
+
+    @PostMapping("/update")
+    public String updateLoan(@ModelAttribute LoanUpdateDTO loanUpdateDTO){
+        loanService.updateLoan(loanUpdateDTO);
         return "redirect:/loans/list";
     }
 }

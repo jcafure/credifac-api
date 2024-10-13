@@ -1,5 +1,6 @@
 package com.credifac.managementloan.mapper;
 
+import com.credifac.managementloan.domain.PaymentStatus;
 import com.credifac.managementloan.dto.*;
 import com.credifac.managementloan.entity.Loan;
 
@@ -7,13 +8,7 @@ import com.credifac.managementloan.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,12 +34,14 @@ public class LoanMapper {
 
     public LoanUpdateDTO mapLoanToLoanUpdateDTO(Loan loan) {
         var dto = new LoanUpdateDTO();
+        dto.setIdLoan(loan.getId());
         dto.setNameCustomer(loan.getCustomer().getName());
         dto.setPhoneNumber(StringUtils.formatPhoneNumber(loan.getCustomer().getPhoneNumber()));
         dto.setLoanDateFormated(StringUtils.formatDateToBrazilianFormat(loan.getDateLoan()));
         dto.setTotalAmountformated(StringUtils.formatCurrency(loan.getTotalAmount()));
         dto.setLoanStatus(loan.getLoanStatus().getNameStatus());
         dto.setInstallmentDTOList(getInstallmentUpdateDTOS(loan));
+        dto.setStatusInstallmentPayment(PaymentStatus.getAllPaymentStatusNames());
 
         return dto;
     }

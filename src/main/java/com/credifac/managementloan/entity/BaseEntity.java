@@ -18,9 +18,8 @@ public abstract class BaseEntity implements Serializable {
         return id;
     }
 
-    public Long setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return id;
     }
 
 }

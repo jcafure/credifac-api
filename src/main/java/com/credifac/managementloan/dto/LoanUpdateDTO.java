@@ -14,10 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 public class LoanUpdateDTO {
 
+    private Long idLoan;
     private String nameCustomer;
     private String phoneNumber;
     private String loanDateFormated;
     private String totalAmountformated;
     private String loanStatus;
     private List<InstallmentUpdateDTO> installmentDTOList = new ArrayList<>();
+    private List<String> statusInstallmentPayment = new ArrayList<>();
 }

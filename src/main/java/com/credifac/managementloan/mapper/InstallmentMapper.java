@@ -17,6 +17,7 @@ public class InstallmentMapper {
 
      private InstallmentDTO convertToInstallmentDTO(Installment installment) {
         var dto = new InstallmentDTO();
+        dto.idInstallment = installment.getId();
         dto.installmentNumber = installment.getInstallmentNumber();
         dto.installmentAmount = installment.getInstallmentAmount();
         dto.paymentStatus = PaymentStatus.OPEN.name();
