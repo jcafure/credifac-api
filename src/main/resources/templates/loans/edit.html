@@ -56,7 +56,7 @@
                                         <span th:text="${installment.installmentAmountFormated}">Valor da Parcela</span> -
                                         <!-- Exibe o status atual da parcela -->
                                         <span th:text="${installment.paymentStatus}">Status</span> -
-
+                                        <span th:text="${installment.dueDateFormated}">Data de Vencimento</span> -
                                         <!-- Dropdown para selecionar o status da parcela -->
                                         <select th:name="installmentDTOList[__${iter.index}__].paymentStatus" th:id="'installmentStatus' + ${installment.id}">
                                             <option th:each="status : ${loanUpdateDTO.statusInstallmentPayment}"
