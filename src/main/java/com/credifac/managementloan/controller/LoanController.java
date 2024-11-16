@@ -2,7 +2,6 @@ package com.credifac.managementloan.controller;
 
 import com.credifac.managementloan.dto.LoanRequestDTO;
 import com.credifac.managementloan.dto.LoanUpdateDTO;
-import com.credifac.managementloan.entity.Loan;
 import com.credifac.managementloan.service.LoanService;
 
 import jakarta.validation.Valid;
@@ -11,11 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.util.Locale;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/loans")
