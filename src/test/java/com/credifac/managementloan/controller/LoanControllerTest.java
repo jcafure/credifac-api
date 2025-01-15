@@ -2,15 +2,18 @@ package com.credifac.managementloan.controller;
 
 import com.credifac.managementloan.dto.LoanDTO;
 import com.credifac.managementloan.dto.LoanRequestDTO;
+import com.credifac.managementloan.dto.LoanUpdateDTO;
+import com.credifac.managementloan.entity.Loan;
 import com.credifac.managementloan.service.LoanService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,8 +31,10 @@ class LoanControllerTest {
     @MockBean
     private LoanService loanService;
 
-    @InjectMocks
     private LoanController loanController;
+
+    @Mock
+    private Model model;
 
     @BeforeEach
     void setUp() {
@@ -37,7 +42,7 @@ class LoanControllerTest {
     }
 
     @Test
-    void shouldReturnLoanCreateForm() throws Exception {
+    void testShouldReturnLoanCreateForm() throws Exception {
         mockMvc.perform(get("/loans"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/loans/create"))
@@ -45,7 +50,7 @@ class LoanControllerTest {
     }
 
     @Test
-    void shouldCreateLoanAndRedirectToList() throws Exception {
+    void testShouldCreateLoanAndRedirectToList() throws Exception {
         LoanRequestDTO loanRequest = new LoanRequestDTO();
         loanRequest.setDateLoan(LocalDate.now());
         loanRequest.setLoanAmount(BigDecimal.valueOf(5000));
@@ -71,7 +76,7 @@ class LoanControllerTest {
 
 
     @Test
-    void shouldListLoans() throws Exception {
+    void testShouldListLoans() throws Exception {
         when(loanService.findAll()).thenReturn(List.of());
 
         mockMvc.perform(get("/loans/list"))
@@ -81,7 +86,7 @@ class LoanControllerTest {
     }
 
     @Test
-    void shouldDeleteLoanAndRedirectToList() throws Exception {
+    void testShouldDeleteLoanAndRedirectToList() throws Exception {
         doNothing().when(loanService).delete(1L);
 
         mockMvc.perform(get("/loans/delete/1"))
@@ -89,5 +94,41 @@ class LoanControllerTest {
                 .andExpect(redirectedUrl("/loans/list"));
 
         verify(loanService, times(1)).delete(1L);
+    }
+
+    @Test
+    void testGetFormUpdateLoan_shouldReturnEditViewAndAddAttributesToModel() throws Exception {
+        Long loanId = 1L;
+        final var mockLoanUpdateDTO = new LoanUpdateDTO();
+        mockLoanUpdateDTO.setNameCustomer("Test Customer");
+        mockLoanUpdateDTO.setLoanDateFormated("2024-11-01");
+        mockLoanUpdateDTO.setTotalAmountformated("1000.00");
+        mockLoanUpdateDTO.setLoanStatus("OPEN");
+
+        when(loanService.findById(loanId)).thenReturn(mockLoanUpdateDTO);
+
+        mockMvc.perform(get("/loans/update/{id}", loanId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/loans/edit"))
+                .andExpect(model().attribute("loanUpdateDTO", mockLoanUpdateDTO));
+    }
+
+    @Test
+    void testUpdateLoan() throws Exception {
+        final var mockLoanUpdateDTO = new LoanUpdateDTO();
+        mockLoanUpdateDTO.setNameCustomer("Test Customer");
+        mockLoanUpdateDTO.setLoanDateFormated("2024-11-01");
+        mockLoanUpdateDTO.setTotalAmountformated("1000.00");
+        mockLoanUpdateDTO.setLoanStatus("OPEN");
+
+        Loan mockLoanEntity = new Loan();
+        when(loanService.updateLoan(mockLoanUpdateDTO)).thenReturn(mockLoanEntity);  // Simula retorno de um Loan
+
+        mockMvc.perform(post("/loans/update")
+                        .flashAttr("loanUpdateDTO", mockLoanUpdateDTO)) //
+                .andExpect(status().is3xxRedirection())  //
+                .andExpect(redirectedUrl("/loans/list")); //
+
+        verify(loanService).updateLoan(mockLoanUpdateDTO);
     }
 }

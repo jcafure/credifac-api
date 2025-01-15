@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InstallmentDTO {
 
+    public Long idInstallment;
     public int installmentNumber;
     public BigDecimal installmentAmount;
     public LocalDate dueDate;
     public String paymentStatus;
+
 }

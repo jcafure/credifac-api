@@ -1,8 +1,11 @@
  package com.credifac.managementloan.service;
 
  import com.credifac.managementloan.domain.PaymentStatus;
+ import com.credifac.managementloan.dto.InstallmentUpdateDTO;
  import com.credifac.managementloan.dto.LoanDTO;
  import com.credifac.managementloan.dto.LoanRequestDTO;
+ import com.credifac.managementloan.dto.LoanUpdateDTO;
+ import com.credifac.managementloan.entity.Customer;
  import com.credifac.managementloan.entity.Installment;
  import com.credifac.managementloan.entity.Loan;
  import com.credifac.managementloan.mapper.LoanMapper;
@@ -17,9 +20,13 @@
  import java.math.BigDecimal;
  import java.time.LocalDate;
  import java.util.List;
+ import java.util.Optional;
 
+ import static org.assertj.core.api.Assertions.assertThat;
  import static org.junit.jupiter.api.Assertions.*;
+ import static org.mockito.ArgumentMatchers.any;
  import static org.mockito.Mockito.verify;
+ import static org.mockito.Mockito.when;
 
  class LoanServiceTest {
 
@@ -72,16 +79,45 @@
          loan.setTotalAmount(loanRequestDTO.getLoanAmount());
          loan.setInstallments(List.of(installment01, installment02, installment03));
 
-         Mockito.when(installmentService.generateValue(loanRequestDTO.getLoanAmount(), loanRequestDTO.getDateLoan())).
+         when(installmentService.generateValue(loanRequestDTO.getLoanAmount(), loanRequestDTO.getDateLoan())).
                  thenReturn(List.of(installment01, installment02, installment03));
-         Mockito.when(loanRepository.save(Mockito.any(Loan.class))).thenReturn(loan);
-         Mockito.when(mapper.toDto(Mockito.any(Loan.class))).thenReturn(new LoanDTO());
+         when(loanRepository.save(any(Loan.class))).thenReturn(loan);
+         when(mapper.toDto(any(Loan.class))).thenReturn(new LoanDTO());
 
          LoanDTO result = service.createLoan(loanRequestDTO);
 
          assertNotNull(result);
          verify(installmentService).generateValue(loanRequestDTO.getLoanAmount(), loanRequestDTO.getDateLoan());
-         verify(loanRepository).save(Mockito.any(Loan.class));
-         verify(mapper).toDto(Mockito.any(Loan.class));
+         verify(loanRepository).save(any(Loan.class));
+         verify(mapper).toDto(any(Loan.class));
+     }
+
+     @Test
+     void testUpdateLoan() {
+         final var loan = new Loan();
+         final var customer = new Customer();
+         final var installment1 = new Installment();
+         final var installmentUpdateDTO = new InstallmentUpdateDTO();
+         loan.setId(1L);
+         loan.setCustomer(customer);
+         customer.setPhoneNumber("123456789");
+         installment1.setId(1L);
+         installment1.setPaymentStatus(PaymentStatus.OPEN);
+         loan.setInstallments(List.of(installment1));
+         LoanUpdateDTO loanUpdateDTO = new LoanUpdateDTO();
+         loanUpdateDTO.setIdLoan(1L);
+         loanUpdateDTO.setPhoneNumber("987654321");
+         installmentUpdateDTO.setId(1L);
+         installmentUpdateDTO.setPaymentStatus(PaymentStatus.PAID.getNamePaymentStatus());
+         loanUpdateDTO.setInstallmentDTOList(List.of(installmentUpdateDTO));
+
+         when(loanRepository.findById(loanUpdateDTO.getIdLoan())).thenReturn(Optional.of(loan));
+         when(loanRepository.save(any(Loan.class))).thenReturn(loan);
+         Loan updatedLoan = service.updateLoan(loanUpdateDTO);
+
+         assertThat(updatedLoan.getCustomer().getPhoneNumber()).isEqualTo("987654321");
+         assertThat(updatedLoan.getInstallments().get(0).getPaymentStatus()).isEqualTo(PaymentStatus.PAID);
+
+         verify(loanRepository).save(loan);
      }
  }

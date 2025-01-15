@@ -1,14 +1,15 @@
 package com.credifac.managementloan.service;
 
 import com.credifac.managementloan.domain.LoanStatus;
-import com.credifac.managementloan.dto.LoanDTO;
-import com.credifac.managementloan.dto.LoanRequestDTO;
+import com.credifac.managementloan.domain.PaymentStatus;
+import com.credifac.managementloan.dto.*;
 import com.credifac.managementloan.entity.Customer;
 import com.credifac.managementloan.entity.Installment;
 import com.credifac.managementloan.entity.Loan;
 import com.credifac.managementloan.mapper.LoanMapper;
 import com.credifac.managementloan.repository.LoanRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -44,9 +45,36 @@ public class LoanService {
                 .collect(toList());
     }
 
+    public LoanUpdateDTO findById(Long id) {
+        return loanRepository.findById(id)
+                .map(mapper::mapLoanToLoanUpdateDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Empréstimo com ID " + id + " não encontrado."));
+    }
+
     public void delete(Long id) {
         Optional<Loan> loanOptional = loanRepository.findById(id);
         loanOptional.ifPresent(loan -> loanRepository.delete(loan));
+    }
+
+    public Loan updateLoan(LoanUpdateDTO loanUpdateDTO) {
+        Optional<Loan> loan = loanRepository.findById(loanUpdateDTO.getIdLoan());
+        if (loan.isPresent()){
+            var loanEntity = loan.get();
+            loanEntity.getCustomer().setPhoneNumber(loanUpdateDTO.getPhoneNumber());
+            if (loanUpdateDTO.getInstallmentDTOList() != null){
+                for (InstallmentUpdateDTO installmentDTO : loanUpdateDTO.getInstallmentDTOList()) {
+                    loanEntity.getInstallments().stream()
+                            .filter(installment -> installment.getId().equals(installmentDTO.getId()))
+                            .forEach(installment -> {
+                                installment.setPaymentStatus(PaymentStatus.fromDisplayName(installmentDTO.getPaymentStatus()));
+                                installment.setLoan(loanEntity);
+                            });
+                }
+            }
+            return loanRepository.save(loanEntity);
+        }else {
+            throw new EntityNotFoundException("Empréstimo não encontrado com ID: " + loanUpdateDTO.getIdLoan());
+        }
     }
 
     private static Customer buildCustomer(String name, String phoneNumber) {
