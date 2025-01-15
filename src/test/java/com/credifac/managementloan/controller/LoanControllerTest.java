@@ -122,12 +122,12 @@ class LoanControllerTest {
         mockLoanUpdateDTO.setLoanStatus("OPEN");
 
         Loan mockLoanEntity = new Loan();
-        when(loanService.updateLoan(mockLoanUpdateDTO)).thenReturn(mockLoanEntity);  // Simula retorno de um Loan
+        when(loanService.updateLoan(mockLoanUpdateDTO)).thenReturn(mockLoanEntity);
 
         mockMvc.perform(post("/loans/update")
-                        .flashAttr("loanUpdateDTO", mockLoanUpdateDTO)) //
-                .andExpect(status().is3xxRedirection())  //
-                .andExpect(redirectedUrl("/loans/list")); //
+                        .flashAttr("loanUpdateDTO", mockLoanUpdateDTO))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/loans/list"));
 
         verify(loanService).updateLoan(mockLoanUpdateDTO);
     }
