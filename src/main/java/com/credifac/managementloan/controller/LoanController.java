@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,11 +33,25 @@ public class LoanController {
         model.addAttribute("loanRequestDTO", new LoanRequestDTO());
         return "/loans/create";
     }
+
+    // @GetMapping("/list")
+    // public String getFormListLoan(Model model, @RequestParam(required = false) String search) {
+    //     List<LoanDTO> loans = loanService.findByFilters(search);
+    //     model.addAttribute("loans", loans);
+    //     model.addAttribute("search", search);
+    //     return "/loans/list";
+    // }
     @GetMapping("/list")
-    public String getFormListLoan(Model model, @RequestParam(required = false) String search) {
-        List<LoanDTO> loans = loanService.findByFilters(search);
-        model.addAttribute("loans", loans);
+    public String getFormListLoan(Model model,
+                                @RequestParam(required = false) String search,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("dateLoan").descending());
+        Page<LoanDTO> loans = loanService.findByFilters(search, pageable);
+        model.addAttribute("loans", loans.getContent());
         model.addAttribute("search", search);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", loans.getTotalPages());
         return "/loans/list";
     }
 
