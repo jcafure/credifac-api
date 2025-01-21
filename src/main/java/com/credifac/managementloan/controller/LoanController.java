@@ -1,11 +1,16 @@
 package com.credifac.managementloan.controller;
 
+import com.credifac.managementloan.dto.LoanDTO;
 import com.credifac.managementloan.dto.LoanRequestDTO;
 import com.credifac.managementloan.dto.LoanUpdateDTO;
+import com.credifac.managementloan.entity.Loan;
 import com.credifac.managementloan.service.LoanService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,11 +29,11 @@ public class LoanController {
         model.addAttribute("loanRequestDTO", new LoanRequestDTO());
         return "/loans/create";
     }
-
     @GetMapping("/list")
-    public String getFormListLoan(Model model) {
-        var loans = loanService.findAll();
+    public String getFormListLoan(Model model, @RequestParam(required = false) String search) {
+        List<LoanDTO> loans = loanService.findByFilters(search);
         model.addAttribute("loans", loans);
+        model.addAttribute("search", search);
         return "/loans/list";
     }
 

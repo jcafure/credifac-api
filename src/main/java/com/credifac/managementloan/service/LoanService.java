@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -97,5 +98,12 @@ public class LoanService {
     private static void addInstallment(Loan loan, Installment installment) {
         loan.getInstallments().add(installment);
         installment.setLoan(loan);
+    }
+
+    public List<LoanDTO> findByFilters(String search) {
+        return loanRepository.findByFilters(search)
+                .stream()
+                .map(loan -> mapper.toDto(loan))
+                .collect(Collectors.toList());
     }
 }
