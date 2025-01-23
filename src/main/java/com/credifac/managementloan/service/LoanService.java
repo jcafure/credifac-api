@@ -12,6 +12,8 @@ import com.credifac.managementloan.repository.LoanRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -97,5 +100,10 @@ public class LoanService {
     private static void addInstallment(Loan loan, Installment installment) {
         loan.getInstallments().add(installment);
         installment.setLoan(loan);
+    }
+
+    public Page<LoanDTO> findByFilters(String search, Pageable pageable) {
+        return loanRepository.findByFilters(search, pageable)
+                    .map(loan -> mapper.toDto(loan));
     }
 }
