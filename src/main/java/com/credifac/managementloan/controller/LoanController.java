@@ -34,13 +34,6 @@ public class LoanController {
         return "/loans/create";
     }
 
-    // @GetMapping("/list")
-    // public String getFormListLoan(Model model, @RequestParam(required = false) String search) {
-    //     List<LoanDTO> loans = loanService.findByFilters(search);
-    //     model.addAttribute("loans", loans);
-    //     model.addAttribute("search", search);
-    //     return "/loans/list";
-    // }
     @GetMapping("/list")
     public String getFormListLoan(Model model,
                                 @RequestParam(required = false) String search,
